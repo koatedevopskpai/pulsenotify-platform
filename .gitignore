@@ -23,3 +23,7 @@ Thumbs.db
 
 # Personal reference (not for CI/CD)
 improvements.txt
+
+# Generated test artifacts
+.coverage
+test.db
