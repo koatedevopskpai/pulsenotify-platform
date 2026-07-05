@@ -1,6 +1,6 @@
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.2.0"
+  version = "6.6.1"
 
   name = "pulsenotify-vpc"
   cidr = "10.0.0.0/16"
