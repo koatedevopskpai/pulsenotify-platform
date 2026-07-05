@@ -11,6 +11,11 @@ def test_create_item_empty_name(client):
     assert response.status_code == 422
 
 
+def test_create_item_whitespace_name(client):
+    response = client.post("/items", json={"name": "   "})
+    assert response.status_code == 422
+
+
 def test_list_items_empty(client):
     response = client.get("/items")
     assert response.status_code == 200
