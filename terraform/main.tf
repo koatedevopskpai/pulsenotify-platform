@@ -17,11 +17,11 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "pulsenotify-tfstate-dn036q"
-    key            = "pulsenotify/terraform.tfstate"
-    region         = "us-east-1"
-    use_lockfile   = true
-    encrypt        = true
+    bucket       = "pulsenotify-tfstate-dn036q"
+    key          = "pulsenotify/terraform.tfstate"
+    region       = "us-east-1"
+    use_lockfile = true
+    encrypt      = true
   }
 }
 
@@ -79,9 +79,9 @@ resource "aws_security_group" "app_sg" {
 }
 
 resource "aws_instance" "pulsenotify_app" {
-  ami           = data.aws_ami.latest_amazon_linux.id
-  instance_type = var.instance_type
-  subnet_id     = module.vpc.public_subnets[0]
+  ami                         = data.aws_ami.latest_amazon_linux.id
+  instance_type               = var.instance_type
+  subnet_id                   = module.vpc.public_subnets[0]
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.app_sg.id]
 

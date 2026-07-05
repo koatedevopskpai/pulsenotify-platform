@@ -4,10 +4,10 @@ resource "aws_security_group" "rds_sg" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    description = "PostgreSQL from app security group"
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
+    description     = "PostgreSQL from app security group"
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
     security_groups = [aws_security_group.app_sg.id]
   }
 
@@ -55,14 +55,14 @@ resource "aws_db_instance" "pulsenotify_db" {
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
   db_subnet_group_name   = aws_db_subnet_group.pulsenotify_db_subnet.name
 
-  publicly_accessible    = false
-  skip_final_snapshot    = false
+  publicly_accessible       = false
+  skip_final_snapshot       = false
   final_snapshot_identifier = "pulsenotify-final-${formatdate("YYYYMMDDhhmm", timestamp())}"
-  backup_retention_period = 7
-  backup_window           = "03:00-04:00"
-  maintenance_window      = "sun:04:00-05:00"
-  deletion_protection     = true
-  apply_immediately       = true
+  backup_retention_period   = 7
+  backup_window             = "03:00-04:00"
+  maintenance_window        = "sun:04:00-05:00"
+  deletion_protection       = true
+  apply_immediately         = true
 
   tags = merge(local.common_tags, {
     Name = "pulsenotify-db"
