@@ -1,2 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
 
-.terraform/
+# Environment
+.env
+.env.*
+
+# Terraform state (never commit)
+*.tfstate
+*.tfstate.backup
+*.tfstate.*.backup
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Personal reference (not for CI/CD)
+improvements.txt
