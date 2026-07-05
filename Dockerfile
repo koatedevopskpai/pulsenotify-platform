@@ -1,20 +1,30 @@
-# Stage 1: Build
-FROM python:3.11-slim as builder
+FROM python:3.11-slim AS builder
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --user --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --user -r requirements.txt
 
-# Stage 2: Runtime
 FROM python:3.11-slim
 WORKDIR /app
 
-# NEW: Install curl so the docker-compose healthcheck works
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -g 999 python && useradd -r -u 999 -g python python
-USER python
-COPY --from=builder /root/.local /home/python/.local
-COPY . .
-ENV PATH=/home/python/.local/bin:$PATH
+RUN groupadd -g 1000 appuser && \
+    useradd -r -u 1000 -g appuser appuser
+
+COPY --from=builder /root/.local /home/appuser/.local
+
+COPY --chown=appuser:appuser . .
+
+ENV PATH=/home/appuser/.local/bin:$PATH \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+USER appuser
 EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+CMD ["./startup.sh"]

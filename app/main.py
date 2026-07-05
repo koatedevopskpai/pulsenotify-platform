@@ -1,51 +1,24 @@
-# app/main.py
-from fastapi import FastAPI, Depends
-from sqlalchemy.orm import Session
-from pydantic import BaseModel
-import os
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from prometheus_fastapi_instrumentator import Instrumentator
 
-from app.database import engine, SessionLocal, Base
-from app.models import Item
+from app.core.config import settings
+from app.core.logging import configure_logging
+from app.routers import health, items
 
-# Create all tables (will be replaced by Alembic later)
-Base.metadata.create_all(bind=engine)
+configure_logging(settings.log_level)
 
-app = FastAPI(title="PulseNotify API", version="0.1.0")
+app = FastAPI(title="PulseNotify API", version=settings.api_version)
 
-# Dependency to get a DB session
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+app.include_router(health.router)
+app.include_router(items.router)
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-@app.get("/health")
-def health_check():
-    return {"status": "healthy", "environment": os.getenv("APP_ENV", "development")}
-
-
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to PulseNotify – Your DevOps Journey Starts Here"}
-
-
-class ItemCreate(BaseModel):
-    name: str
-
-
-@app.post("/items")
-def create_item(item: ItemCreate, db: Session = Depends(get_db)):
-    db_item = Item(name=item.name)
-    db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
-    return db_item
-
-
-@app.get("/items")
-def list_items(db: Session = Depends(get_db)):
-    return db.query(Item).all()
+Instrumentator().instrument(app).expose(app)
