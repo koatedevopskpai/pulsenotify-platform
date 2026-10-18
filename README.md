@@ -1,11 +1,11 @@
 # PulseNotify API
 
-[![CI](https://github.com/koate/pulsenotify-api/actions/workflows/ci.yml/badge.svg)](https://github.com/koate/pulsenotify-api/actions/workflows/ci.yml)
+[![CI](https://github.com/koatedevopskpai/pulsenotify-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/koatedevopskpai/pulsenotify-platform/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A production-grade notification microservice built with FastAPI, containerised
-with Docker, deployed via CI/CD pipelines, and provisioned with Terraform on
-AWS. Designed to demonstrate end-to-end DevOps expertise.
+A notification reference microservice built with FastAPI, with Docker, CI/CD and
+Terraform configuration for AWS. This claim sweep inspected source wording; it did
+not inspect cloud deployment receipts or establish production operation.
 
 ## Architecture
 
@@ -163,3 +163,10 @@ infrastructure as code, containerisation, testing, and observability.
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+
+## Claim review — 18 October 2026
+
+See [verification and limits](evidence/W5-08.md) for the source revision, claim
+classification and observed CI status. Wording corrections do not establish a
+new deployment, passing test suite or production operation.
