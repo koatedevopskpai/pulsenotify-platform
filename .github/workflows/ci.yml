@@ -73,7 +73,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: "1.7"
+          # 1.11 required: terraform/main.tf's S3 backend uses `use_lockfile`,
+          # which Terraform only supports from 1.10 onwards.
+          terraform_version: "1.11"
       - run: terraform fmt -check -diff
       - run: terraform init -backend=false
       - run: terraform validate
